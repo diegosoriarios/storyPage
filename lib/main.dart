@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'customIcons.dart';
+import 'cardScrollWidget.dart';
 import 'data.dart';
-import 'dart:math';
+import 'profile.dart';
 
 void main() => runApp(MaterialApp(
       home: MyApp(),
@@ -16,8 +17,28 @@ class MyApp extends StatefulWidget {
 var cardAspectRatio = 12.0 / 16.0;
 var widgetAspectRatio = cardAspectRatio * 1.2;
 
+class SecondRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Second Page")
+      ),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("Go Back"),
+        ),
+      ),
+    );
+  }
+}
+
 class _MyAppState extends State<MyApp> {
   var currentPage = images.length - 1.0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +60,7 @@ class _MyAppState extends State<MyApp> {
               end: Alignment.topCenter,
               tileMode: TileMode.clamp)),
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Column(
@@ -55,7 +77,7 @@ class _MyAppState extends State<MyApp> {
                         color: Colors.white,
                         size: 30.0,
                       ),
-                      onPressed: () {},
+                      onPressed: () {_scaffoldKey.currentState.openDrawer();},
                     ),
                     IconButton(
                       icon: Icon(
@@ -119,7 +141,7 @@ class _MyAppState extends State<MyApp> {
               ),
               Stack(
                 children: <Widget>[
-                  CardScrollWidget(currentPage),
+                  CardScrollWidget(currentPage, widgetAspectRatio),
                   Positioned.fill(
                     child: PageView.builder(
                       itemCount: images.length,
@@ -199,113 +221,62 @@ class _MyAppState extends State<MyApp> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CardScrollWidget extends StatelessWidget {
-  var currentPage;
-  var padding = 20.0;
-  var verticalInset = 20.0;
-
-  CardScrollWidget(this.currentPage);
-
-  @override
-  Widget build(BuildContext context) {
-    return new AspectRatio(
-      aspectRatio: widgetAspectRatio,
-      child: LayoutBuilder(builder: (context, contraints) {
-        var width = contraints.maxWidth;
-        var height = contraints.maxHeight;
-
-        var safeWidth = width - 2 * padding;
-        var safeHeight = height - 2 * padding;
-
-        var heightOfPrimaryCard = safeHeight;
-        var widthOfPrimaryCard = heightOfPrimaryCard * cardAspectRatio;
-
-        var primaryCardLeft = safeWidth - widthOfPrimaryCard;
-        var horizontalInset = primaryCardLeft / 2;
-
-        List<Widget> cardList = new List();
-
-        for (var i = 0; i < images.length; i++) {
-          var delta = i - currentPage;
-          bool isOnRight = delta > 0;
-
-          var start = padding +
-              max(
-                  primaryCardLeft -
-                      horizontalInset * -delta * (isOnRight ? 15 : 1),
-                  0.0);
-
-          var cardItem = Positioned.directional(
-            top: padding + verticalInset * max(-delta, 0.0),
-            bottom: padding + verticalInset * max(-delta, 0.0),
-            start: start,
-            textDirection: TextDirection.rtl,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.0),
-              child: Container(
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                  BoxShadow(
-                      color: Colors.black12,
-                      offset: Offset(3.0, 6.0),
-                      blurRadius: 10.0)
-                ]),
-                child: AspectRatio(
-                  aspectRatio: cardAspectRatio,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      Image.asset(images[i], fit: BoxFit.cover),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 8.0),
-                              child: Text(title[i],
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 25.0,
-                                      fontFamily: "SF-Pro-Text-Regular")),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 12.0, bottom: 12.0),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 22.0, vertical: 6.0),
-                                decoration: BoxDecoration(
-                                    color: Colors.blueAccent,
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: Text("Read Later",
-                                    style: TextStyle(color: Colors.white)),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+        drawer: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Color(0xFF1b1e44),
+          ),
+          child: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: new CircleAvatar(),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFF1b1e44),
+                        Color(0xFF2d3447),
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      tileMode: TileMode.clamp)),
                 ),
-              ),
+                ListTile(
+                  title: Text('Home', style: TextStyle(color: Colors.white)),
+                  leading: IconTheme(data: new IconThemeData(color: Colors.white), child: Icon(Icons.home)),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('Profile', style: TextStyle(color: Colors.white)),
+                  leading: IconTheme(data: new IconThemeData(color: Colors.white), child: Icon(Icons.person)),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    //Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+                  },
+                ),
+                ListTile(
+                  title: Text('Logout', style: TextStyle(color: Colors.white)),
+                  leading: IconTheme(data: new IconThemeData(color: Colors.white), child: Icon(Icons.power_settings_new)),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
-          );
-          cardList.add(cardItem);
-        }
-        return Stack(
-          children: cardList,
-        );
-      }),
+          ),
+        ),
+      ),
     );
   }
 }
