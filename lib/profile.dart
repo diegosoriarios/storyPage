@@ -10,20 +10,21 @@ class Profile extends StatelessWidget {
       ),
       body: Center(
         child: ListView(
+          padding: new EdgeInsets.all(10.0),
           children: [
-            _tile('CineArts at the Empire', '85 W Portal Ave', Icons.theaters),
-            _tile('The Castro Theater', '429 Castro St', Icons.theaters),
-            _tile('Alamo Drafthouse Cinema', '2550 Mission St', Icons.theaters),
-            _tile('Roxie Theater', '3117 16th St', Icons.theaters),
-            _tile('United Artists Stonestown Twin', '501 Buckingham Way',
-                Icons.theaters),
-            _tile('AMC Metreon 16', '135 4th St #3000', Icons.theaters),
+            CircleAvatar(
+              minRadius: 75.0,
+            ),
             Divider(),
-            _tile('K\'s Kitchen', '757 Monterey Blvd', Icons.restaurant),
-            _tile('Emmy\'s Restaurant', '1923 Ocean Ave', Icons.restaurant),
-            _tile(
-                'Chaiya Thai Restaurant', '272 Claremont Blvd', Icons.restaurant),
-            _tile('La Ciccia', '291 30th St', Icons.restaurant),
+            _tile('Nome', 'Diego Soria Rios', Icons.person),
+            _tile('E-mail', 'diegosoriarios@gmial.com', Icons.email),
+            _tile('Telefone', '54 99190 7331', Icons.phone),
+            _tile('Location', 'Passo Fundo', Icons.location_on),
+            Divider(),
+            _tile('Github', '@diegosoriarios', Icons.link),
+            _tile('Instagram', '@diegosoriarios', Icons.link),
+            _tile('Twitter', '@diegosoriarios', Icons.link),
+            _tile('Linkedin', 'diegosoriarios', Icons.link),
           ],
         )
       ),
@@ -34,12 +35,12 @@ class Profile extends StatelessWidget {
     title: Text(title,
       style: TextStyle(
         fontWeight: FontWeight.w500,
-        fontSize: 20,
+        fontSize: 20, 
       )),
       subtitle: Text(subtitle),
-      leading: Icon(
+      trailing: Icon(
         icon,
-      color: Colors.blue[500],
-    ),
+        color: Colors.grey,
+      ),
   );
 }

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'customIcons.dart';
 import 'cardScrollWidget.dart';
@@ -39,6 +40,14 @@ class SecondRoute extends StatelessWidget {
 class _MyAppState extends State<MyApp> {
   var currentPage = images.length - 1.0;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  final TextEditingController _filter = new TextEditingController();
+  final dio = new Dio();
+  String _searchText = "";
+  List names = new List();
+  List filteredNames = new List();
+  Icon _searchIcon = Icon(Icons.search);
+  Widget _appBarTitle = new Text( 'Search Example' );
 
   @override
   Widget build(BuildContext context) {
@@ -278,5 +287,25 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void _searchPressed() {
+    setState(() {
+      if (this._searchIcon.icon == Icons.search) {
+        this._searchIcon = new Icon(Icons.close);
+        this._appBarTitle = new TextField(
+          controller: _filter,
+          decoration: new InputDecoration(
+            prefixIcon: new Icon(Icons.search),
+            hintText: 'Search...'
+          ),
+        );
+      } else {
+        this._searchIcon = new Icon(Icons.search);
+        this._appBarTitle = new Text('Search Example');
+        filteredNames = names;
+        _filter.clear();
+      }
+    });
   }
 }
