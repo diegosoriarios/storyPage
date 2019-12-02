@@ -4,6 +4,7 @@ import 'customIcons.dart';
 import 'cardScrollWidget.dart';
 import 'data.dart';
 import 'profile.dart';
+import 'grid.dart';
 
 void main() => runApp(MaterialApp(
       home: MyApp(),
@@ -261,6 +262,13 @@ class _MyAppState extends State<MyApp> {
                     // Then close the drawer
                     //Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+                  },
+                ),
+                ListTile(
+                  title: Text('Grid', style: TextStyle(color: Colors.white)),
+                  leading: IconTheme(data: new IconThemeData(color: Colors.white), child: Icon(Icons.image)),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Grid()));
                   },
                 ),
                 ListTile(
